@@ -344,6 +344,51 @@
          component_map = std::make_unique<std::map<size_t, Component>>();
  
      if (component_map->find(hash) == component_map->end())
+--- a/src/PROPOSAL/detail/PROPOSAL/methods.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/methods.cxx
+@@ -15,9 +15,24 @@
+ #include <sstream>
+ #include <stdexcept>
+ #include <string>
++
++#include <sys/types.h>
+ #include <sys/stat.h>
++#ifdef _MSC_VER
++#define strcasecmp _stricmp
++#define stat _stat
++#include <io.h>
++#define access _access
++#define F_OK 0
++#define W_OK 2
++#define R_OK 4
++#else
+ #include <unistd.h>  // check for write permissions
++#endif
++
++#ifndef _WIN32
+ #include <wordexp.h> // Used to expand path with environment variables
++#endif
+ 
+ #include "PROPOSAL/math/Interpolant.h"
+ #include "PROPOSAL/math/InterpolantBuilder.h"
+@@ -105,6 +120,9 @@ namespace Helper {
+     // //
+     std::string ResolvePath(const std::string& pathname, bool checkReadonly)
+     {
++#ifdef _WIN32
++        return pathname;
++#else
+         wordexp_t p;
+         // Use WRDE_UNDEF to consider undefined shell variables as error
+         int success = wordexp(pathname.c_str(), &p, WRDE_UNDEF);
+@@ -134,6 +152,7 @@ namespace Helper {
+         } else {
+             return "";
+         }
++#endif
+     }
+ 
+     // -------------------------------------------------------------------------
 --- a/src/PROPOSAL/detail/PROPOSAL/propagation_utility/PropagationUtility.cxx
 +++ b/src/PROPOSAL/detail/PROPOSAL/propagation_utility/PropagationUtility.cxx
 @@ -82,8 +82,8 @@ PropagationUtility::PropagationUtility(
