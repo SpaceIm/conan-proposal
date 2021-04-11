@@ -1,0 +1,381 @@
+--- a/src/PROPOSAL/PROPOSAL/crosssection/CrossSection.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/CrossSection.h
+@@ -77,7 +77,7 @@ namespace detail {
+         using dndx_map_t
+             = std::unordered_map<size_t, std::tuple<double, dndx_ptr_t>>;
+         if (cut)
+-            if (cut->GetEcut() == INF and cut->GetVcut() == 1)
++            if (cut->GetEcut() == INF && cut->GetVcut() == 1)
+                 return std::unique_ptr<dndx_map_t>();
+         auto calc = make_dndx(interpol, param, p, m, cut, hash);
+         auto dndx_map = std::make_unique<dndx_map_t>();
+@@ -95,7 +95,7 @@ namespace detail {
+             = std::unordered_map<size_t, std::tuple<double, dndx_ptr_t>>;
+         if (cut) // TODO: is this branch realy necessary, why is a dndx created
+                  // for these settings?
+-            if (cut->GetEcut() == INF and cut->GetVcut() == 1)
++            if (cut->GetEcut() == INF && cut->GetVcut() == 1)
+                 return std::unique_ptr<dndx_map_t>();
+         auto dndx_map = std::make_unique<dndx_map_t>();
+         for (auto& c : m.GetComponents()) {
+@@ -335,7 +335,7 @@ public:
+     inline double CalculatedEdx(double energy) override
+     {
+         auto loss = 0.;
+-        if (not dedx)
++        if (!dedx)
+             return loss;
+         // will produce no working in cpp17
+         // for (auto& [weight, calc] : *dedx)
+@@ -349,7 +349,7 @@ public:
+     inline double CalculatedE2dx(double energy) override
+     {
+         auto loss = 0.;
+-        if (not de2dx)
++        if (!de2dx)
+             return loss;
+         // will produce no working in cpp17
+         // for (auto& [weight, calc] : *de2dx)
+--- a/src/PROPOSAL/PROPOSAL/medium/Components.h
++++ b/src/PROPOSAL/PROPOSAL/medium/Components.h
+@@ -120,9 +120,9 @@ bool operator==(Component const&, Component const&) noexcept;
+ inline bool operator==(std::shared_ptr<Component> const& lhs,
+     std::shared_ptr<Component> const& rhs) noexcept
+ {
+-    if (lhs != nullptr and rhs != nullptr)
++    if (lhs != nullptr && rhs != nullptr)
+         return *lhs == *rhs;
+-    if (lhs == nullptr and rhs == nullptr)
++    if (lhs == nullptr && rhs == nullptr)
+         return true;
+     return false;
+ }
+--- a/src/PROPOSAL/PROPOSAL/scattering/Scattering.h
++++ b/src/PROPOSAL/PROPOSAL/scattering/Scattering.h
+@@ -172,7 +172,7 @@ inline auto make_scattering(MultipleScatteringType ms_t,
+         ms = make_multiple_scattering(ms_t, p, m, std::forward<Args>(args)...);
+ 
+     auto st = std::vector<std::unique_ptr<st_param>>();
+-    if (not st_t.empty()) {
++    if (!st_t.empty()) {
+         for (auto const& t : st_t)
+             st.emplace_back(make_default_stochastic_deflection(t, p, m));
+     }
+--- a/src/PROPOSAL/PROPOSAL/scattering/ScatteringFactory.h
++++ b/src/PROPOSAL/PROPOSAL/scattering/ScatteringFactory.h
+@@ -75,7 +75,7 @@ std::unique_ptr<Scattering> make_scattering(const nlohmann::json& config,
+         }
+     }
+ 
+-    if (ms_multiplier == 1.0 and sd_multiplier.empty()) {
++    if (ms_multiplier == 1.0 && sd_multiplier.empty()) {
+         return std::make_unique<Scattering>(ms_pointer, sd);
+     } else {
+         return std::unique_ptr<Scattering>(new ScatteringMultiplier(ms_pointer, sd, ms_multiplier, sd_multiplier));
+--- a/src/PROPOSAL/detail/PROPOSAL/EnergyCutSettings.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/EnergyCutSettings.cxx
+@@ -53,7 +53,7 @@ EnergyCutSettings::EnergyCutSettings(const nlohmann::json& config)
+         std::string setting = config["e_cut"];
+         std::transform(
+             setting.begin(), setting.end(), setting.begin(), ::tolower);
+-        if (setting == "inf" or setting == "infinity") {
++        if (setting == "inf" || setting == "infinity") {
+             ecut = INF;
+         } else {
+             throw std::invalid_argument("e_cut must be numerical "
+--- a/src/PROPOSAL/detail/PROPOSAL/Propagator.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/Propagator.cxx
+@@ -113,7 +113,7 @@ Secondaries Propagator::Propagate(const ParticleState& initial_particle,
+             current_sector = GetCurrentSector(state.position, state.direction);
+             auto hierarchy_f = get<GEOMETRY>(current_sector)->GetHierarchy();
+             if (hierarchy_i > hierarchy_condition
+-                and hierarchy_f < hierarchy_condition)
++                && hierarchy_f < hierarchy_condition)
+                 continue_propagation = false;
+             break;
+         }
+--- a/src/PROPOSAL/detail/PROPOSAL/Secondaries.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/Secondaries.cxx
+@@ -176,7 +176,7 @@ std::shared_ptr<ParticleState> Secondaries::GetEntryPoint(
+         auto dist_i_f = (pos_f - pos_i).magnitude();
+ 
+         auto distance = geometry.DistanceToBorder(pos_i, dir_i).first;
+-        if (distance <= dist_i_f and distance >= 0) {
++        if (distance <= dist_i_f && distance >= 0) {
+             if ( dist_i_f - distance < GEOMETRY_PRECISION)
+                 return std::make_unique<ParticleState>(track_.at(i + 1));
+             auto entry_point = RePropagateDistance(track_.at(i), distance);
+@@ -203,7 +203,7 @@ std::shared_ptr<ParticleState> Secondaries::GetExitPoint(
+         auto dist_i_f = (pos_f - pos_i).magnitude();
+ 
+         auto distance = geometry.DistanceToBorder(pos_f, -dir_i).first;
+-        if (distance <= dist_i_f and distance >= 0) {
++        if (distance <= dist_i_f && distance >= 0) {
+             if ( dist_i_f - distance < GEOMETRY_PRECISION)
+                 return std::make_unique<ParticleState>(track_.at(i - 1));
+             auto exit_point = RePropagateDistance(track_.at(i-1),
+@@ -326,7 +326,7 @@ std::vector<StochasticLoss> Secondaries::GetStochasticLosses() const
+     std::vector<StochasticLoss> losses;
+     for (unsigned int i=1; i<track_.size(); i++) {
+         auto interaction_type = types_[i];
+-        if (interaction_type != InteractionType::ContinuousEnergyLoss and
++        if (interaction_type != InteractionType::ContinuousEnergyLoss &&
+                 interaction_type != InteractionType::Decay) {
+             losses.emplace_back(static_cast<int>(interaction_type),
+                                 track_[i-1].energy - track_[i].energy,
+@@ -346,7 +346,7 @@ std::vector<StochasticLoss> Secondaries::GetStochasticLosses(const Geometry& geo
+     for (unsigned int i=1; i<track_.size(); i++) {
+         if (geometry.IsInside(track_[i].position, track_[i].direction)) {
+             auto interaction_type = types_[i];
+-            if (interaction_type != InteractionType::ContinuousEnergyLoss and
++            if (interaction_type != InteractionType::ContinuousEnergyLoss &&
+                interaction_type != InteractionType::Decay) {
+                 losses.emplace_back(static_cast<int>(interaction_type),
+                                     track_[i-1].energy - track_[i].energy,
+--- a/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSection.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSection.cxx
+@@ -39,7 +39,7 @@ namespace detail {
+         std::vector<std::tuple<double, std::unique_ptr<CrossSectionDEDX>>>*
+             dedx_ptr)
+     {
+-        if (not dedx_ptr)
++        if (!dedx_ptr)
+             return 0.;
+         auto min = std::numeric_limits<double>::infinity();
+         for (auto& it : *dedx_ptr) {
+--- a/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDE2DX/AxisBuilderDE2DX.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDE2DX/AxisBuilderDE2DX.cxx
+@@ -14,7 +14,7 @@ void AxisBuilderDE2DX::refine_definition_range(
+         std::function<double(double)> func, unsigned int i)
+ {
+     auto ax = cubic_splines::ExpAxis<double>(low, up, n);
+-    while (not(func(ax.back_transform(i)) > 0) and i < n)
++    while (!(func(ax.back_transform(i)) > 0) && i < n)
+         ++i;
+     if (i == n)
+         throw std::logic_error("No positive values to build dE2dx tables!");
+--- a/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDEDX/AxisBuilderDEDX.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDEDX/AxisBuilderDEDX.cxx
+@@ -14,7 +14,7 @@ void AxisBuilderDEDX::refine_definition_range(
+     std::function<double(double)> func, unsigned int i)
+ {
+     auto ax = cubic_splines::ExpAxis<double>(low, up, n);
+-    while (not(func(ax.back_transform(i)) > 0) and i < n)
++    while (!(func(ax.back_transform(i)) > 0) && i < n)
+         ++i;
+     if (i == n)
+         throw exception_axis_builder_dedx_out_of_range();
+--- a/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDNDX/AxisBuilderDNDX.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDNDX/AxisBuilderDNDX.cxx
+@@ -20,7 +20,7 @@ void AxisBuilderDNDX::refine_definition_range(
+     std::function<double(double)> func, unsigned int i)
+ {
+     auto ax = energy_axis_t(energy_lim.low, energy_lim.up, energy_lim.nodes);
+-    while (not(func(ax.back_transform(i)) > 0) and i < energy_lim.nodes)
++    while (!(func(ax.back_transform(i)) > 0) && i < energy_lim.nodes)
+         ++i;
+     if (i == energy_lim.nodes)
+         throw std::logic_error("No positive values to build dNdx tables!");
+--- a/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDNDX/CrossSectionDNDXInterpolant.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDNDX/CrossSectionDNDXInterpolant.cxx
+@@ -21,7 +21,7 @@ std::function<double(double, double, double)> retransform_loss<crosssection::Com
+ 
+ namespace PROPOSAL {
+     double transform_relative_loss(double v_cut, double v_max, double v) {
+-        if (v < 0 or v_max == 0)
++        if (v < 0 || v_max == 0)
+             return v_cut;
+         if (v >= 1)
+             return v_max;
+--- a/src/PROPOSAL/detail/PROPOSAL/density_distr/density_distr.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/density_distr/density_distr.cxx
+@@ -64,7 +64,7 @@ Axis::Axis() {}
+ Axis::Axis(const Vector3D& fp0) : fp0_(fp0) {}
+ 
+ Axis::Axis(const nlohmann::json& config) {
+-    if(not config.contains("fp0")) throw std::invalid_argument("Axis: No fp0 found.");
++    if(!config.contains("fp0")) throw std::invalid_argument("Axis: No fp0 found.");
+     fp0_ = Cartesian3D(config.at("fp0"));
+ }
+ 
+@@ -116,7 +116,7 @@ CartesianAxis::CartesianAxis() : Axis() {
+ CartesianAxis::CartesianAxis(const Vector3D& fAxis, const Vector3D& fp0) :  Axis(fp0) , fAxis_(fAxis) {}
+ 
+ CartesianAxis::CartesianAxis(const nlohmann::json& config) : Axis(config) {
+-    if(not config.contains("fAxis")) throw std::invalid_argument("Axis: No fAxis found.");
++    if(!config.contains("fAxis")) throw std::invalid_argument("Axis: No fAxis found.");
+     fAxis_ = Cartesian3D(config.at("fAxis"));
+ }
+ 
+--- a/src/PROPOSAL/detail/PROPOSAL/geometry/Box.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/geometry/Box.cxx
+@@ -20,11 +20,11 @@ Box::Box(const Vector3D& position, double x, double y, double z)
+ Box::Box(const nlohmann::json& config)
+     : Geometry(config)
+ {
+-    if(not config.at("length").is_number())
++    if(!config.at("length").is_number())
+         throw std::invalid_argument("Length is not a number.");
+-    if(not config.at("width").is_number())
++    if(!config.at("width").is_number())
+         throw std::invalid_argument("Width is not a number.");
+-    if(not config.at("height").is_number())
++    if(!config.at("height").is_number())
+         throw std::invalid_argument("Height is not a number.");
+ 
+     x_ = config["length"].get<double>();
+--- a/src/PROPOSAL/detail/PROPOSAL/geometry/Geometry.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/geometry/Geometry.cxx
+@@ -50,12 +50,12 @@ Geometry::Geometry(const std::string name, const Vector3D& position)
+ 
+ Geometry::Geometry(const nlohmann::json& config)
+ {
+-    if(not config.is_object()) throw std::invalid_argument("No json object found.");
++    if(!config.is_object()) throw std::invalid_argument("No json object found.");
+ 
+     name_ = config.value("shape", "unknown");
+     hierarchy_ = config.value("hierarchy", 0);
+ 
+-    if(not config.contains("origin"))
++    if(!config.contains("origin"))
+         throw std::invalid_argument("No geometry origin found.");
+     position_ = Cartesian3D(config.at("origin"));
+ }
+@@ -129,8 +129,8 @@ bool Geometry::IsBehind(const Vector3D& position, const Vector3D& direction) con
+ bool Geometry::IsEntering(const Vector3D &position, const Vector3D &direction) const {
+     auto dist_forward = DistanceToBorder(position, direction);
+     auto dist_backward = DistanceToBorder(position, -Cartesian3D(direction));
+-    if (dist_forward.first >= 0 and dist_forward.second == -1) {
+-        if (dist_backward.first == -1 and dist_backward.second == -1) {
++    if (dist_forward.first >= 0 && dist_forward.second == -1) {
++        if (dist_backward.first == -1 && dist_backward.second == -1) {
+             return true;
+         }
+     }
+@@ -141,8 +141,8 @@ bool Geometry::IsEntering(const Vector3D &position, const Vector3D &direction) c
+ bool Geometry::IsLeaving(const Vector3D &position, const Vector3D &direction) const {
+     auto dist_forward = DistanceToBorder(position, direction);
+     auto dist_backward = DistanceToBorder(position, -Cartesian3D(direction));
+-    if (dist_forward.first == -1 and dist_forward.second == -1) {
+-        if (dist_backward.first >= 0 and dist_backward.second == -1) {
++    if (dist_forward.first == -1 && dist_forward.second == -1) {
++        if (dist_backward.first >= 0 && dist_backward.second == -1) {
+             return true;
+         }
+     }
+--- a/src/PROPOSAL/detail/PROPOSAL/geometry/Sphere.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/geometry/Sphere.cxx
+@@ -25,8 +25,8 @@ Sphere::Sphere(const Vector3D& position, double radius, double inner_radius)
+ Sphere::Sphere(const nlohmann::json& config)
+     : Geometry(config)
+ {
+-    if(not config.is_object()) throw std::invalid_argument("No json object found.");
+-    if(not config.at("outer_radius").is_number())
++    if(!config.is_object()) throw std::invalid_argument("No json object found.");
++    if(!config.at("outer_radius").is_number())
+         throw std::invalid_argument("Outer radius is not a number.");
+ 
+     config["outer_radius"].get_to(radius_);
+--- a/src/PROPOSAL/detail/PROPOSAL/math/Cartesian3D.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/math/Cartesian3D.cxx
+@@ -5,11 +5,11 @@
+ using namespace PROPOSAL;
+ 
+ Cartesian3D::Cartesian3D(const nlohmann::json& config) {
+-    if (not config.is_array() or not(config.size() == 3))
++    if (!config.is_array() || !(config.size() == 3))
+         throw std::invalid_argument("Json array for Cartesian3D is not a 3 "
+                                     "component array.");
+ 
+-    if (!config[0].is_number() or !config[1].is_number() or !config[2].is_number())
++    if (!config[0].is_number() || !config[1].is_number() || !config[2].is_number())
+         throw std::invalid_argument("Json array for Cartesian3D must contain "
+                                     "three numbers (x, y, z).");
+ 
+--- a/src/PROPOSAL/detail/PROPOSAL/math/Function.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/math/Function.cxx
+@@ -18,7 +18,7 @@ Polynom::Polynom(std::vector<double> coefficients) : N_(coefficients.size()) {
+ }
+ 
+ Polynom::Polynom(const nlohmann::json& config) {
+-    if(not config.is_array()) throw std::invalid_argument("Polynom is not an array.");
++    if(!config.is_array()) throw std::invalid_argument("Polynom is not an array.");
+ 
+     N_ = config["coefficients"].get<std::vector<double>>().size();
+     coeff_ = new double[N_];
+--- a/src/PROPOSAL/detail/PROPOSAL/math/Spherical3D.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/math/Spherical3D.cxx
+@@ -4,11 +4,11 @@
+ using namespace PROPOSAL;
+ 
+ Spherical3D::Spherical3D(const nlohmann::json& config) {
+-    if (not config.is_array() or not(config.size() == 3))
++    if (!config.is_array() || !(config.size() == 3))
+         throw std::invalid_argument("Json array for Spherical3D is not a 3 "
+                                     "component array.");
+ 
+-    if (!config[0].is_number() or !config[1].is_number() or !config[2].is_number())
++    if (!config[0].is_number() || !config[1].is_number() || !config[2].is_number())
+         throw std::invalid_argument("Json array for Spherical3D must contain "
+                                     "three numbers (radius, azimuth, theta).");
+ 
+--- a/src/PROPOSAL/detail/PROPOSAL/math/Spline.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/math/Spline.cxx
+@@ -39,9 +39,9 @@ Spline::Spline(std::string path, bool binary) {
+ 
+ Spline::Spline(const nlohmann::json& config) {
+     if (!config.contains("x")) throw std::invalid_argument("Spline: x vector must be defined.");
+-    if(not config["x"].is_array()) throw std::invalid_argument("Spline: x is not an array.");
++    if(!config["x"].is_array()) throw std::invalid_argument("Spline: x is not an array.");
+     if (!config.contains("y")) throw std::invalid_argument("Spline: y vector must be defined.");
+-    if(not config["y"].is_array()) throw std::invalid_argument("Spline: y is not an array.");
++    if(!config["y"].is_array()) throw std::invalid_argument("Spline: y is not an array.");
+ 
+     x_ = config["x"].get<std::vector<double>>();
+     y_ = config["y"].get<std::vector<double>>();
+--- a/src/PROPOSAL/detail/PROPOSAL/medium/Components.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/medium/Components.cxx
+@@ -57,7 +57,7 @@ Component::Component(
+     hash_combine(hash, nucCharge_, atomicNum_, atomInMolecule_,
+                  logConstant_, bPrime_, averageNucleonWeight_, wood_saxon_);
+ 
+-    if (not component_map)
++    if (!component_map)
+         component_map = std::make_unique<std::map<size_t, Component>>();
+ 
+     if (component_map->find(hash) == component_map->end())
+--- a/src/PROPOSAL/detail/PROPOSAL/propagation_utility/PropagationUtility.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/propagation_utility/PropagationUtility.cxx
+@@ -82,8 +82,8 @@ PropagationUtility::PropagationUtility(
+     : collection(collect)
+ {
+     if (collect.interaction_calc == nullptr
+-        or collect.displacement_calc == nullptr
+-        or collect.time_calc == nullptr) {
++        || collect.displacement_calc == nullptr
++        || collect.time_calc == nullptr) {
+         throw std::invalid_argument("Interaction, displacement and time "
+                                     "calculator need to be defined.");
+     }
+--- a/src/PROPOSAL/detail/PROPOSAL/secondaries/parametrization/annihilation/SingleDifferentialAnnihilation.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/secondaries/parametrization/annihilation/SingleDifferentialAnnihilation.cxx
+@@ -15,7 +15,7 @@ using namespace PROPOSAL;
+ double secondaries::SingleDifferentialAnnihilation::CalculateRho(
+     double energy, double rnd, const Component& comp)
+ {
+-    if (not dndx)
++    if (!dndx)
+         throw std::logic_error("dndx Interpolant for SingleDifferentialAnnihilation not defined.");
+     for (auto& it : *dndx) {
+         if (comp.GetHash() == it.first) {
+--- a/src/PROPOSAL/detail/PROPOSAL/secondaries/parametrization/photopairproduction/PhotoTsai.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/secondaries/parametrization/photopairproduction/PhotoTsai.cxx
+@@ -110,7 +110,7 @@ double secondaries::PhotoTsai::FunctionToIntegral(
+ double secondaries::PhotoTsai::CalculateRho(
+     double energy, double rnd, const Component& comp)
+ {
+-    if (not dndx)
++    if (!dndx)
+         throw std::logic_error("dndx Interpolant for PhotoTsai not defined.");
+     for (auto& it : *dndx) {
+         if (comp.GetHash() == it.first) {

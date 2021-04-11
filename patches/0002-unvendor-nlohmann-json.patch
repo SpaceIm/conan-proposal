@@ -1,0 +1,252 @@
+--- a/src/PROPOSAL/PROPOSAL/EnergyCutSettings.h
++++ b/src/PROPOSAL/PROPOSAL/EnergyCutSettings.h
+@@ -28,7 +28,7 @@
+ 
+ #pragma once
+ 
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ #include <ostream>
+ 
+ namespace PROPOSAL {
+--- a/src/PROPOSAL/PROPOSAL/Propagator.h
++++ b/src/PROPOSAL/PROPOSAL/Propagator.h
+@@ -1,7 +1,7 @@
+ #pragma once
+ 
+ #include "PROPOSAL/Secondaries.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ #include <unordered_map>
+ 
+ namespace PROPOSAL {
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/AnnihilationFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/AnnihilationFactory.h
+@@ -1,5 +1,5 @@
+ #pragma once
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ #include <memory>
+ 
+ namespace PROPOSAL {
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/BremsstrahlungFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/BremsstrahlungFactory.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include <memory>
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+     struct CrossSectionBase;
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/ComptonFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/ComptonFactory.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include <memory>
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+     struct CrossSectionBase;
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/EpairProductionFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/EpairProductionFactory.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include <memory>
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+     struct CrossSectionBase;
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/IonizationFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/IonizationFactory.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include <memory>
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+     struct CrossSectionBase;
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/MupairProductionFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/MupairProductionFactory.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include <memory>
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+     struct CrossSectionBase;
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/PhotoPairProductionFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/PhotoPairProductionFactory.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include <memory>
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+     struct CrossSectionBase;
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/PhotonuclearFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/PhotonuclearFactory.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include <memory>
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+     struct CrossSectionBase;
+--- a/src/PROPOSAL/PROPOSAL/crosssection/Factories/WeakInteractionFactory.h
++++ b/src/PROPOSAL/PROPOSAL/crosssection/Factories/WeakInteractionFactory.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include <memory>
+-#include "PROPOSAL/json_fwd.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+     struct CrossSectionBase;
+--- a/src/PROPOSAL/PROPOSAL/density_distr/density_distr.h
++++ b/src/PROPOSAL/PROPOSAL/density_distr/density_distr.h
+@@ -30,7 +30,7 @@
+ #include <functional>
+ #include <string>
+ #include "PROPOSAL/math/Cartesian3D.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+ class Axis {
+--- a/src/PROPOSAL/PROPOSAL/geometry/Box.h
++++ b/src/PROPOSAL/PROPOSAL/geometry/Box.h
+@@ -30,7 +30,7 @@
+ #pragma once
+ 
+ #include "PROPOSAL/geometry/Geometry.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ 
+ 
+ namespace PROPOSAL {
+--- a/src/PROPOSAL/PROPOSAL/geometry/Cylinder.h
++++ b/src/PROPOSAL/PROPOSAL/geometry/Cylinder.h
+@@ -30,7 +30,7 @@
+ #pragma once
+ 
+ #include "PROPOSAL/geometry/Geometry.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+ class Cylinder : public Geometry
+--- a/src/PROPOSAL/PROPOSAL/geometry/Geometry.h
++++ b/src/PROPOSAL/PROPOSAL/geometry/Geometry.h
+@@ -34,7 +34,7 @@
+ #include <PROPOSAL/math/Cartesian3D.h>
+ 
+ #include "PROPOSAL/math/Vector3D.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ 
+ 
+ namespace PROPOSAL {
+--- a/src/PROPOSAL/PROPOSAL/geometry/Sphere.h
++++ b/src/PROPOSAL/PROPOSAL/geometry/Sphere.h
+@@ -30,7 +30,7 @@
+ #pragma once
+ 
+ #include "PROPOSAL/geometry/Geometry.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL {
+ 
+--- a/src/PROPOSAL/PROPOSAL/math/Cartesian3D.h
++++ b/src/PROPOSAL/PROPOSAL/math/Cartesian3D.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include "PROPOSAL/math/Vector3D.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ 
+ namespace PROPOSAL{
+     class Spherical3D;
+--- a/src/PROPOSAL/PROPOSAL/math/Function.h
++++ b/src/PROPOSAL/PROPOSAL/math/Function.h
+@@ -31,7 +31,7 @@
+ 
+ #include <functional>
+ #include <vector>
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ 
+ // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ // %%%%%%%%%%%%%%%%%%%       Polynom      %%%%%%%%%%%%%%%%%%%%
+--- a/src/PROPOSAL/PROPOSAL/math/Spherical3D.h
++++ b/src/PROPOSAL/PROPOSAL/math/Spherical3D.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ #include "PROPOSAL/math/Vector3D.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ namespace PROPOSAL  {
+     class Cartesian3D;
+     class Spherical3D : public Vector3D {
+--- a/src/PROPOSAL/PROPOSAL/math/Spline.h
++++ b/src/PROPOSAL/PROPOSAL/math/Spline.h
+@@ -33,7 +33,7 @@
+ #include <string>
+ #include <utility>
+ #include <vector>
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ #include "PROPOSAL/math/Function.h"
+ 
+ namespace PROPOSAL {
+--- a/src/PROPOSAL/PROPOSAL/medium/MediumFactory.h
++++ b/src/PROPOSAL/PROPOSAL/medium/MediumFactory.h
+@@ -3,7 +3,7 @@
+ #include <memory>
+ #include <string>
+ 
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ #include "PROPOSAL/medium/Medium.h"
+ 
+ namespace PROPOSAL {
+--- a/src/PROPOSAL/PROPOSAL/methods.h
++++ b/src/PROPOSAL/PROPOSAL/methods.h
+@@ -28,7 +28,7 @@
+ 
+ #pragma once
+ 
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ #include <deque>
+ #include <functional>
+ #include <map>
+--- a/src/PROPOSAL/PROPOSAL/scattering/ScatteringFactory.h
++++ b/src/PROPOSAL/PROPOSAL/scattering/ScatteringFactory.h
+@@ -1,7 +1,7 @@
+ #pragma once
+ 
+ #include <utility>
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ #include "PROPOSAL/medium/Medium.h"
+ #include "PROPOSAL/particle/ParticleDef.h"
+ #include "PROPOSAL/scattering/stochastic_deflection/Parametrization.h"
+--- a/src/PROPOSAL/detail/PROPOSAL/math/MathMethods.cxx
++++ b/src/PROPOSAL/detail/PROPOSAL/math/MathMethods.cxx
+@@ -7,7 +7,7 @@
+ #include "PROPOSAL/Constants.h"
+ #include "PROPOSAL/Logging.h"
+ #include "PROPOSAL/methods.h"
+-#include "PROPOSAL/json.hpp"
++#include <nlohmann/json.hpp>
+ #include <limits>
+ 
+ namespace PROPOSAL {
