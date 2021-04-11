@@ -25,6 +25,8 @@ class ProposalConan(ConanFile):
         "with_python": False,
     }
 
+    short_paths = True
+
     exports_sources = ["CMakeLists.txt", "patches/**"]
     generators = "cmake", "cmake_find_package"
     _cmake = None
