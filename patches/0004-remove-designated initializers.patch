@@ -1,6 +1,6 @@
 --- a/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDNDX/CrossSectionDNDXInterpolant.cxx
 +++ b/src/PROPOSAL/detail/PROPOSAL/crosssection/CrossSectionDNDX/CrossSectionDNDXInterpolant.cxx
-@@ -83,10 +83,9 @@ double CrossSectionDNDXInterpolant::GetUpperLimit(double energy, double rate)
+@@ -87,10 +87,9 @@ double CrossSectionDNDXInterpolant::GetUpperLimit(double energy, double rate)
          throw std::invalid_argument("no dNdx for this energy defined.");
      auto lim = GetIntegrationLimits(energy);
  
