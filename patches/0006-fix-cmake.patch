@@ -1,6 +1,6 @@
 --- a/src/PROPOSAL/CMakeLists.txt
 +++ b/src/PROPOSAL/CMakeLists.txt
-@@ -3,9 +3,14 @@ include(GNUInstallDirs)
+@@ -3,9 +3,11 @@ include(GNUInstallDirs)
  add_library(PROPOSAL)
  add_library(PROPOSAL::PROPOSAL ALIAS PROPOSAL)
  
@@ -8,9 +8,6 @@
 -    POSITION_INDEPENDENT_CODE ON
 -    )
 +if(MSVC)
-+  if(BUILD_SHARED_LIBS)
-+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-+  endif()
 +  target_compile_options(PROPOSAL PRIVATE "/bigobj" "/EHsc")
 +elseif(MINGW)
 +  target_compile_options(PROPOSAL PRIVATE "-Wa,-mbig-obj")
@@ -18,11 +15,3 @@
  
  target_include_directories(PROPOSAL PUBLIC
      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-@@ -25,6 +30,7 @@ target_link_libraries(PROPOSAL
-     )
- 
- install(TARGETS PROPOSAL EXPORT PROPOSALTargets
-+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-     )

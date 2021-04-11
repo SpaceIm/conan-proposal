@@ -53,6 +53,8 @@ class ProposalConan(ConanFile):
     def validate(self):
         if self.settings.compiler.cppstd:
             tools.check_min_cppstd(self, "14")
+        if self.settings.compiler == "Visual Studio" and self.options.shared:
+            raise ConanInvalidConfiguration("PROPOSAL shared is not supported with Visual Studio")
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
